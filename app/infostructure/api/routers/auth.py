@@ -8,11 +8,10 @@ from app.core.schemes.token import TokenScheme
 from app.core.security.token import generate_token, decode_token
 
 from app.infostructure.dependencies.services import UserServiceDep
-from app.infostructure.authentication.authentication import authenticate_user, get_current_user
+from app.infostructure.authentication.authentication import authenticate_user
 
 
 router = APIRouter(tags=["auth"])
-CurrentUserDep = Annotated[UserPrivateScheme, Depends(get_current_user)]
 
 
 @router.post("/register", response_model=UserPrivateScheme, status_code=status.HTTP_201_CREATED)
