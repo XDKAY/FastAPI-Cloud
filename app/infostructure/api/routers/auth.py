@@ -73,7 +73,7 @@ async def refresh(user_service: UserServiceDep, refresh_token: Optional[str] = C
 
     payload = decode_token(refresh_token)
 
-    user_id = UUID(payload.get("sub"))
+    user_id = payload.get("sub")
 
     access_token = generate_token(user_id, token_type="access")
 
@@ -83,7 +83,7 @@ async def refresh(user_service: UserServiceDep, refresh_token: Optional[str] = C
     )
 
 @router.post("/logout")
-async def logout(current_user: CurrentUserDep, response: Response):
+async def logout(response: Response):
     response.delete_cookie("refresh_token")
     return {"message": "Successfully logged out"}
 
