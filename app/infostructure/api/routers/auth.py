@@ -57,8 +57,8 @@ async def token(
     )
 
     return TokenScheme(
-        token=access_token,
-        type="bearer"
+        access_token=access_token,
+        token_type="bearer"
     )
 
 

@@ -45,7 +45,6 @@ def decode_token(token: str) -> Mapping[str, str]:
             settings.token.secret.get_secret_value(),
             algorithms=[settings.token.algorithm]
         )
-        payload["sub"] = UUID(payload.get("sub"))
         return payload
 
     except jwt.exceptions.ExpiredSignatureError:
