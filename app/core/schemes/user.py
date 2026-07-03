@@ -21,7 +21,7 @@ class UserCreateScheme(BaseModel):
 
     @field_validator("username")
     @classmethod
-    def validate_username(self, username: str) -> str:
+    def validate_username(cls, username: str) -> str:
         if not username.isalnum():
             raise ValueError("Username must be alphanumeric")
         return username
@@ -29,7 +29,7 @@ class UserCreateScheme(BaseModel):
 
     @field_validator("password")
     @classmethod
-    def validate_password(self, password: SecretStr) -> SecretStr:
+    def validate_password(cls, password: SecretStr) -> SecretStr:
         value = password.get_secret_value()
 
         if not any(char.islower() for char in value):
