@@ -4,18 +4,20 @@ from fastapi import APIRouter, HTTPException, Response, Depends, Cookie, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.core.schemes.user import UserCreateScheme, UserPrivateScheme
+from app.core.schemes.node import NodeCreateScheme
 from app.core.schemes.token import TokenScheme
 from app.core.security.token import generate_token, decode_token
 
 from app.infostructure.dependencies.services import UserServiceDep
 from app.infostructure.authentication.authentication import authenticate_user
+from app.infostructure.dependencies.services import NodeServiceDep
 
 
 router = APIRouter(tags=["auth"])
 
 
 @router.post("/register", response_model=UserPrivateScheme, status_code=status.HTTP_201_CREATED)
-async def register(user_create_scheme: UserCreateScheme, user_service: UserServiceDep):
+async def register(user_create_scheme: UserCreateScheme, user_service: UserServiceDep, node_service: NodeServiceDep):
     existing_user = await user_service.get_existing_user(
         username=user_create_scheme.username,
         email=user_create_scheme.email
@@ -28,6 +30,8 @@ async def register(user_create_scheme: UserCreateScheme, user_service: UserServi
         )
 
     user: UserPrivateScheme = await user_service.create_user(user_create_scheme)
+
+    await node_service.create_node(user_id=user.id, node_scheme=NodeCreateScheme(name="", type="dir"))
 
     return user
 
