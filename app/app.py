@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
+from app.core.utils.file_system import FileSystem
+
 from app.infostructure.db.sqlite.database import (
     sqlite_connect,
     sqlite_disconnect
@@ -16,6 +18,7 @@ from app.infostructure.api import routers
 async def lifespan(_: FastAPI):
     await sqlite_connect()
     await mongo_connect()
+    await FileSystem.create_storage_dir()
     yield
     await sqlite_disconnect()
     await mongo_disconnect()
