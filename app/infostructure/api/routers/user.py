@@ -2,12 +2,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Response
 from app.core.schemes.user import UserPrivateScheme
 from app.infostructure.dependencies.services import UserServiceDep
-from app.infostructure.authentication.authentication import get_current_user
-
+from app.infostructure.dependencies.current_user import CurrentUserDep
 
 router = APIRouter(prefix="/users", tags=["users"])
-
-CurrentUserDep = Annotated[UserPrivateScheme, Depends(get_current_user)]
 
 
 @router.get("/me",response_model=UserPrivateScheme)
