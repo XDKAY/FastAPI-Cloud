@@ -1,4 +1,5 @@
 from typing import Any, Optional, List
+from pathlib import Path
 from uuid import UUID
 from beanie import PydanticObjectId
 
@@ -113,6 +114,14 @@ class NodeService:
             await self._fs.delete_file(user_id=user_id, path=node.path)
 
         await node.delete()
+
+    async def get_path_node(self, user_id: UUID, filename: str) -> Path:
+        node_model = await self._MODEL.find_one(
+            self._MODEL.user_id == user_id,
+            self._MODEL.name == filename
+        )
+
+        return self._fs.get_path_to_directory(user_id=user_id, path=node_model.path)
 
 
 

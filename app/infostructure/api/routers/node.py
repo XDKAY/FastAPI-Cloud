@@ -1,6 +1,7 @@
 from typing import List, Optional, Annotated
 
 from fastapi import APIRouter, status, Query, UploadFile, File
+from fastapi.responses import FileResponse
 
 from app.core.schemes.node import NodeCreateScheme
 from app.infostructure.dependencies.current_user import CurrentUserDep
@@ -58,3 +59,16 @@ async def upload_file(
     )
 
     return node_model
+
+
+@router.get("/download/{filename}", response_class=FileResponse)
+async def download_file(filename: str, current_user: CurrentUserDep, node_service: NodeServiceDep):
+    path = await node_service.get_path_node(user_id=current_user.id, filename=filename)
+    return FileResponse(
+        path=path, 
+        filename=filename, 
+        media_type='application/octet-stream',
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        },
+    )

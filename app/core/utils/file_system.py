@@ -38,7 +38,7 @@ class FileSystem:
     @staticmethod
     async def create_dir(user_id: UUID, path: str):
 
-        path_ = FileSystem._get_path_to_directory(user_id, path)
+        path_ = FileSystem.get_path_to_directory(user_id, path)
 
         is_exist_path = await anyio.Path(path_).exists()
 
@@ -50,7 +50,7 @@ class FileSystem:
     @staticmethod
     async def delete_dir(user_id: UUID, path: str):
         try:
-            path_ = FileSystem._get_path_to_directory(user_id, path)
+            path_ = FileSystem.get_path_to_directory(user_id, path)
 
             is_exist_path = await anyio.Path(path_).exists()
             if is_exist_path:
@@ -61,7 +61,7 @@ class FileSystem:
 
     @staticmethod
     async def create_file(user_id: UUID, path: str, file_object: Any):
-        path_ = FileSystem._get_path_to_directory(user_id, path)
+        path_ = FileSystem.get_path_to_directory(user_id, path)
 
         is_exist_path = await anyio.Path(path_).exists()
 
@@ -76,7 +76,7 @@ class FileSystem:
 
     @staticmethod
     async def delete_file(user_id: UUID, path: str):
-        path_ = FileSystem._get_path_to_directory(user_id, path)
+        path_ = FileSystem.get_path_to_directory(user_id, path)
 
         is_exist_path = await anyio.Path(path_).exists()
 
@@ -85,5 +85,5 @@ class FileSystem:
 
 
     @staticmethod
-    def _get_path_to_directory(user_id: UUID, path: str) -> Path:
+    def get_path_to_directory(user_id: UUID, path: str) -> Path:
         return settings.storage_path / str(user_id) / path
